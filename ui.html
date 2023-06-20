@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+</head>
+
+<body>
+  <canvas id="canvas" width="800" height="600" style="border:1px solid #000000;"></canvas>
+  <script src="file:///Users/samueltranberg/Documents/utility-ai/js/castle.js"></script>
+  <script src="file:///Users/samueltranberg/Documents/utility-ai/js/considerations.js"></script>
+  <script src="file:///Users/samueltranberg/Documents/utility-ai/js/grid.js"></script>
+  <script src="file:///Users/samueltranberg/Documents/utility-ai/js/guard.js"></script>
+  <script src="file:///Users/samueltranberg/Documents/utility-ai/js/server.js"></script>
+  <script src="file:///Users/samueltranberg/Documents/utility-ai/js/ui.js"></script>
+  <script src="file:///Users/samueltranberg/Documents/utility-ai/js/utils.js"></script>
+   
+
+   <script type="module">
+    const canvas = document.getElementById('canvas');
+   
+    
+  function run(){
+      const ctx = canvas.getContext("2d");
+      const gridSize = 50; // Number of squares in each row and column of the grid
+      const squareSize = canvas.width / gridSize;
+      ctx.strokeStyle = 'gray';
+    function getBestPosition() {
+        // Your utility logic here to determine the best position based on certain criteria
+        const randomX = Math.floor(Math.random() * gridSize);
+        const randomY = Math.floor(Math.random() * gridSize);
+
+        return { x: randomX, y: randomY };
+      }
+
+      // Generate castle and guard positions using the utility function
+        function drawGrid() {
+        ctx.strokeStyle = 'gray';
+        ctx.beginPath();
+        for (let row = 0; row <= gridSize; row++) {
+          const y = row * squareSize;
+          ctx.moveTo(0, y);
+          ctx.lineTo(canvas.width, y);
+        }
+        for (let col = 0; col <= gridSize; col++) {
+          const x = col * squareSize;
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, canvas.height);
+        }
+        ctx.stroke();
+      }
+
+      // Generate castle and guard positions using the utility function
+      const castleCount = Math.floor(Math.random() * 25) + 1; // Randomly choose a number of castles between 1 and 5
+      const castles = Array.from({ length: castleCount }, getBestPosition);
+      const guardCount = Math.floor(Math.random() * 50) + 1; // Randomly choose a number of guards between 1 and 5
+      const guards = Array.from({ length: guardCount }, getBestPosition);
+
+
+      // Draw the grid in the background
+      drawGrid();
+
+      // Draw the squares to fill up the grid and show the castle and guards
+      for (let row = 0; row < gridSize; row++) {
+        for (let col = 0; col < gridSize; col++) {
+          const x = col * squareSize;
+          const y = row * squareSize;
+
+          
+
+          // Check if the current square matches the castle's location
+          const castle = castles.find(c => c.x === col && c.y === row)
+          if (castle) {
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(x, y, squareSize, squareSize);
+          }
+
+          // Check if the current square matches any guard's location
+          const guard = guards.find(g => g.x === col && g.y === row);
+          if (guard) {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(x, y, squareSize, squareSize);
+          }
+        }
+      }
+    }
+
+    window.onload = run;
+  </script>
+</body>
+</html>
